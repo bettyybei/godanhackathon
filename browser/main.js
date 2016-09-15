@@ -1,5 +1,17 @@
 $(function initializeMaps() {
     var map = new Datamap({element: document.getElementById('container')});
+    var theOBJECT = [{'src':'Argentina','dst':'Greenland','element':'Chicken','val':'125'}, {'src':'Brazil','dst':'Russia','element':'Dog','val':'9999'}];
+
+
+
+    var countries = Datamap.prototype.worldTopo.objects.world.geometries;
+    var countryCodeDict = {};
+    for (var i = 0, j = countries.length; i < j; i++) {
+      // console.log(countries[i].id, countries[i].properties.name);
+      countryCodeDict[countries[i].properties.name] = countries[i].id;
+    }
+    console.log(countryCodeDict);
+
 
     var election = new Datamap({
         scope: 'world',
@@ -8,108 +20,13 @@ $(function initializeMaps() {
       });
 
 
-    var presidentialTrips = [
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 32.066667,
-                longitude: 34.783333
-            }
-        },
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 19.433333,
-                longitude: -99.133333
-            }
-        },
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 9.933333,
-                longitude: -84.083333
-            }
-        },
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 54.597 ,
-                longitude: -5.93
-            }
-        },
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 52.516667,
-                longitude: 13.383333
-            }
-        },
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 14.692778,
-                longitude: -17.446667
-            }
-        },
-        {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: -26.204444,
-                longitude: 28.045556
-            }
-        },
-                {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: -6.8,
-                longitude: 39.283333
-            }
-        },
-                {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 59.329444,
-                longitude: 18.068611
-            }
-        },
-                {
-            origin: {
-                latitude: 38.895111,
-                longitude: -77.036667
-            },
-            destination: {
-                latitude: 59.95 ,
-                longitude: 30.3
-            }
-        }
-    ];
+    var presidentialTrips = [];
+    theOBJECT.forEach(function(element){
+      presidentialTrips.push({
+        origin: countryCodeDict[element['src']],
+        destination: countryCodeDict[element['dst']]
+      });
+    });
 
     election.arc( presidentialTrips, {strokeWidth: 2});
 });
