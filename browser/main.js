@@ -4,34 +4,52 @@ $(function initializeMaps() {
       source: items
     });
 
-    var theOBJECT, selectedCountryCode;
+    var theOBJECT, selectedCountryCode, queryTitle;
 
     $('#my-button').click(function(evt){
       evt.preventDefault();
       var selectedItem = $('#items').val();
-      var queryBody = {
-        dst: selectedCountryCode
+      var selectedCountry  = $('#dst').val();
+
+      queryTitle = selectedCountry + "'s Top 5 Import Countries of " + selectedItem;
+      var queryBody = {}
+
+      if (selectedCountry !== '') {
+        queryBody.dst = selectedCountryCode
       }
+
       if (selectedItem !== '') {
         queryBody.item = selectedItem;
       }
-      console.log(queryBody);
+
+      if (selectedItem == '' && selectedCountry == '') {
+        queryTitle = "Top 5 Exports by Country"
+      }
+
+      $("#graphTitle").html(queryTitle);
 
       $.post("/search", queryBody)
       .done(function (data) {
         theOBJECT = data;
-        console.log("DATA", data);
         clearLines();
         drawLines();
       })
 
     });
 
+    $('#hamburger').click(function (evt) {
+      evt.preventDefault();
 
-    $.get('/usa', function (data) {
+      $.post("/hamburger", {dst: selectedCountryCode})
+      .done(function (data) {
         theOBJECT = data;
-        console.log(data);
-    });
+        clearLines();
+        drawLines();
+
+        queryTitle = "Top Countries Exporting Hamburger Ingredients (Bread, Meat, Onions, Lettuce, Tomatoes)"
+        $("#graphTitle").html(queryTitle);
+      })
+    })
 
     var worldmap = new Datamap({
       scope: 'world',
@@ -45,16 +63,24 @@ $(function initializeMaps() {
        }
     });
 
-
-
+    var arrForChart = [];
     var arcLines = [];
 
     function clearLines() {
       arcLines = [];
     }
 
+    var temp;
     function drawLines() {
-      theOBJECT.forEach(function(element){
+      arrForChart = [];
+      theOBJECT.forEach(function(element, idx){
+
+        if (theOBJECT.length - idx <= 5){
+          temp = {};
+          temp.label = element.src;
+          temp.y = element.value;
+          arrForChart.push(temp);
+        }
 
         if (element.src === 'USA') {
           arcLines.push({
@@ -94,6 +120,59 @@ $(function initializeMaps() {
 
       console.log(arcLines);
       worldmap.arc( arcLines, {strokeWidth: 2});
+
+      var chart = new CanvasJS.Chart("chartContainer", {
+        theme: "theme2",//theme1
+        backgroundColor: null,
+        title:{/*
+          text: queryTitle,*/
+          fontColor: "#ffffff"
+        },
+        axisX: {
+          title: "Countries",
+          labelFontColor: "#ffffff",
+          titleFontColor: "#ffffff"
+        },
+        axisY: {
+          title: "Tons of Product",
+          labelFontColor: "#ffffff",
+          titleFontColor: "#ffffff"
+        },
+        animationEnabled: false,   // change to true
+        data: [
+        {
+          // Change type to "bar", "area", "spline", "pie",etc.
+          type: "column",
+          dataPoints: arrForChart
+        }
+        ]
+      });
+      chart.render();
+
+
+      var donut_chart = new CanvasJS.Chart("donutChart",
+        {
+        backgroundColor: null,
+        interactivityEnabled: true,
+        data: [
+        {
+         type: "doughnut",
+         indexLabelFontSize: 10,
+         indexLabelFontColor: "white",
+         indexLabelFontStyle: "bold",
+         radius: "100%",
+         innerRadius: "50%",
+         dataPoints: arrForChart,
+         exploded: true
+       },
+       ]
+        });
+      donut_chart.render();
+
+      $('#json-title').html("JSON Object of Query");
+      $('#json-label').html("Double Click to Highlight All")
+
+      $('#json').val(JSON.stringify(theOBJECT));
     }
 
 

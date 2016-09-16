@@ -14,7 +14,6 @@ module.exports = function () {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.post('/search', function (req, res, next) {
-    console.log(req.body);
     Product.findAll({
       where: req.body,
       limit: 10,
@@ -26,16 +25,54 @@ module.exports = function () {
     .catch(next)
   })
 
-  app.get('/usa', function (req, res, next) {
+  app.post('/hamburger', function (req, res, next) {
+    var arr = [];
+    var obj = req.body;
+    obj.item = "Bread";
     Product.findAll({
-        where: {
-            item: 'Bread',
-            dst: 'USA'
-        },
-        limit: 10
+        where: obj,
+        limit: 1,
+        order: '"value" DESC'
     })
-    .then(function (objs) {
-        res.send(objs);
+    .then(function (data) {
+      arr = arr.concat(data);
+      obj.item = "Meat, beef, preparations"
+      return Product.findAll({
+        where: obj,
+        limit: 1,
+        order: '"value" DESC'
+      })
+    })
+    .then(function (data) {
+      arr = arr.concat(data);
+      obj.item = "Onions, dry"
+      return Product.findAll({
+        where: obj,
+        limit: 1,
+        order: '"value" DESC'
+      })
+    })
+    .then(function (data) {
+      arr = arr.concat(data);
+      obj.item = "Lettuce and chicory"
+      return Product.findAll({
+        where: obj,
+        limit: 1,
+        order: '"value" DESC'
+      })
+    })
+    .then(function (data) {
+      arr = arr.concat(data);
+      obj.item = "Tomatoes"
+      return Product.findAll({
+        where: obj,
+        limit: 1,
+        order: '"value" DESC'
+      })
+    })
+    .then(function (data) {
+      arr = arr.concat(data);
+      res.send(arr);
     })
     .catch(next);
   })
