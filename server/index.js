@@ -16,7 +16,7 @@ module.exports = function () {
   app.post('/search', function (req, res, next) {
     Product.findAll({
       where: req.body,
-      limit: 10,
+      limit: 5,
       order: '"value" DESC'
     })
     .then(function (products) {

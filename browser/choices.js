@@ -1,4 +1,4 @@
-var items = [  'AAAAAAAAAA', 'Sugar refined',
+var items = [  'Sugar refined',
   'Beans, dry',
   'Bread',
   'Cake, soybeans',
@@ -365,4 +365,3 @@ var items = [  'AAAAAAAAAA', 'Sugar refined',
 
   items.sort();
 
- // items[0] = "All Food Products";
