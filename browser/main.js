@@ -124,8 +124,7 @@ $(function initializeMaps() {
       var chart = new CanvasJS.Chart("chartContainer", {
         theme: "theme2",//theme1
         backgroundColor: null,
-        title:{/*
-          text: queryTitle,*/
+        title:{
           fontColor: "#ffffff"
         },
         axisX: {
@@ -138,7 +137,7 @@ $(function initializeMaps() {
           labelFontColor: "#ffffff",
           titleFontColor: "#ffffff"
         },
-        animationEnabled: false,   // change to true
+        animationEnabled: true,
         data: [
         {
           // Change type to "bar", "area", "spline", "pie",etc.
@@ -176,19 +175,4 @@ $(function initializeMaps() {
     }
 
 
-
-
-})
-
-/*    var theOBJECT = [{'src':'ARM','dst':'AUS','item':'Chicken','val':'125'}, {'src':'BEN','dst':'BTN','item':'Dog','val':'9999'}];
-*/
-
-// Only show arrows to this destination
-// function selectDst(arr, dst){
-//   var returnArr = [];
-//   arr.forEach(function(element){
-//     if (element.destination === dst){
-//       console.log('match');
-//     }
-//   });
-// }
+});

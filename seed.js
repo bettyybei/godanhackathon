@@ -7,8 +7,6 @@ var text = '';
 var finalArr = [];
 var setOfItems = new Set();
 
-/*[{src: "USA", dst:"Argentina", item: "beans", value: "1000"},{src: "USA", dst:"Brazil", item: "beans", value: "10000"}];*/
-
 var obj = {};
 
 fs.readFile('../countryCodes.txt','utf8', function read(err, data) {
@@ -38,7 +36,6 @@ fs.readFile('../countryCodes.txt','utf8', function read(err, data) {
 
 function readFile(){
   var fileContent2;
-  // var text2 = '';
   fs.readFile('../output.txt','utf8', function read(err, data) {
       if (err) {
           throw err;
@@ -77,10 +74,7 @@ function readFile(){
 function seedProducts(beg, end) {
   console.log("seeding...");
   finalArr = finalArr.slice(beg,end)
-/*  finalArr.forEach(function (obj) {
-    Product.create(obj);
-  })
-*/
+
   var creatingProducts = finalArr.map(function (productObj) {
         return Product.create(productObj);
     });
@@ -94,16 +88,8 @@ db.sync({force: true})
 })
 .then(function () {
   console.log('three...');
-  return seedProducts(100000, 200000);
+  return seedProducts(100000, finalArr.length);
 })
-/*.then(function () {
-  console.log('two...');
-  return seedProducts(200000, 300000);
-})*/
-/*.then(function () {
-  console.log('one...');
-  return seedProducts(300000, finalArr.length)
-})*/
 .then(function () {
   console.log("Success!")
   process.exit(0);
