@@ -5,6 +5,7 @@ var fs = require('fs');
 
 var text = '';
 var finalArr = [];
+var setOfItems = new Set();
 
 /*[{src: "USA", dst:"Argentina", item: "beans", value: "1000"},{src: "USA", dst:"Brazil", item: "beans", value: "10000"}];*/
 
@@ -60,19 +61,20 @@ function readFile(){
             tempObj.src = source;
             tempObj.dst = dest;
             tempObj.item = line[2].replace(/['"]+/g, '');
-            tempObj.value = line[3].replace(/['"]+/g, '');
-            finalArr.push(tempObj);
+            tempObj.value = parseInt(line[3].replace(/['"]+/g, ''));
+
+            setOfItems.add(tempObj.item);
+            if (tempObj.value !== 0) finalArr.push(tempObj);
           }
           tempObj = {};
       });
-      console.log(finalArr);
-      console.log(finalArr.length);
+      console.log("set of items", setOfItems);
+      console.log("final array length", finalArr.length);
 
   });
 }
 
 function seedProducts(beg, end) {
-  console.log(finalArr);
   console.log("seeding...");
   finalArr = finalArr.slice(beg,end)
 /*  finalArr.forEach(function (obj) {

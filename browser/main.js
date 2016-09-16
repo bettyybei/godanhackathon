@@ -1,25 +1,65 @@
 
 $(function initializeMaps() {
-    var map = new Datamap({element: document.getElementById('container')});
+    $( "#items" ).autocomplete({
+      source: items
+    });
+/*
+    $('#my-button').submit(){}*/
 
     var theOBJECT;
     $.get('/usa', function (data) {
         theOBJECT = data;
         console.log(data);
 
-            var election = new Datamap({
+      var election = new Datamap({
         scope: 'world',
         element: document.getElementById('arcs'),
-        projection: 'mercator'
+        projection: 'mercator',
+        done: function(datamap) {
+             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+                 alert(geography.properties.name);
+             });
+         }
       });
 
 
     var presidentialTrips = [];
     theOBJECT.forEach(function(element){
-      presidentialTrips.push({
-        origin: element['src'],
-        destination: element['dst']
-      });
+
+      if (element.src === 'USA') {
+        presidentialTrips.push({
+          origin: {
+            latitude: 40,
+            longitude: -99
+          },
+          destination: element.dst,
+          options: {
+            strokeWidth: Math.log(element.value)/Math.log(15)
+          }
+        })
+      }
+      else if (element.dst === 'USA') {
+        presidentialTrips.push({
+          origin: element.src,
+          destination: {
+            latitude: 40,
+            longitude: -99
+          },
+          options: {
+            strokeWidth: Math.log(element.value)/Math.log(15)
+          }
+        })
+      }
+      else {
+        presidentialTrips.push({
+          origin: element.src,
+          destination: element.dst,
+          options: {
+            strokeWidth: Math.log(element.value)/Math.log(15)
+          }
+        });
+      }
+
     });
 
     election.arc( presidentialTrips, {strokeWidth: 2});

@@ -12,7 +12,8 @@ module.exports = function () {
   app.get('/usa', function (req, res, next) {
     Product.findAll({
         where: {
-            item: 'Chickens'
+            item: 'Bread',
+            dst: 'USA'
         },
         limit: 10
     })
