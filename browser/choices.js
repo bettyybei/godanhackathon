@@ -1,4 +1,4 @@
-var items = [  'Sugar refined',
+var items = [  'AAAAAAAAAA', 'Sugar refined',
   'Beans, dry',
   'Bread',
   'Cake, soybeans',
