@@ -118,7 +118,6 @@ $(function initializeMaps() {
 
       });
 
-      console.log(arcLines);
       worldmap.arc( arcLines, {strokeWidth: 2});
 
       var chart = new CanvasJS.Chart("chartContainer", {
