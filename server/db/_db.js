@@ -1,6 +1,8 @@
 var Sequelize = require('sequelize');
 
-var db = new Sequelize('postgres://localhost:5432/godan', {
+var dbURI = process.env.DATABASE_URI || 'postgres://localhost:5432/godan'
+
+var db = new Sequelize(dbURI, {
   logging: false
 });
 
